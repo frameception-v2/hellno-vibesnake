@@ -17,7 +17,7 @@ import { PROJECT_TITLE } from "~/lib/constants";
 
 interface SnakeGameProps {
   score: number;
-  setScore: (value: number) => void;
+  setScore: (value: number | ((prev: number) => number)) => void;
 }
 
 function SnakeGame({ score, setScore }: SnakeGameProps) {
