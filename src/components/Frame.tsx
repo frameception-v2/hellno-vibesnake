@@ -21,11 +21,11 @@ interface SnakeGameProps {
 }
 
 function SnakeGame({ score, setScore }: SnakeGameProps) {
-  const [snake, setSnake] = useState([{ x: 10, y: 10 }]);
-  const [food, setFood] = useState({ x: 5, y: 5 });
+  const [snake, setSnake] = useState([{ x: 5, y: 5 }]);
+  const [food, setFood] = useState({ x: 2, y: 2 });
   const [direction, setDirection] = useState<'RIGHT' | 'LEFT' | 'UP' | 'DOWN'>('RIGHT');
   const [gameOver, setGameOver] = useState(false);
-  const [speed, setSpeed] = useState(300);
+  const [speed, setSpeed] = useState(200);
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchStartY, setTouchStartY] = useState(0);
 
@@ -44,7 +44,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
   });
 
   const checkCollision = useCallback((head: { x: number, y: number }) => {
-    return head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 ||
+    return head.x < 0 || head.x >= 10 || head.y < 0 || head.y >= 10 ||
       snake.some((segment, index) => index !== 0 && segment.x === head.x && segment.y === head.y);
   }, [snake]);
 
@@ -101,8 +101,8 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
       }
 
       // Wrap snake around grid edges
-      head.x = (head.x + 20) % 20;
-      head.y = (head.y + 20) % 20;
+      head.x = (head.x + 10) % 10;
+      head.y = (head.y + 10) % 10;
 
       if (checkCollision(head)) {
         setGameOver(true);
@@ -113,7 +113,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
 
       if (head.x === food.x && head.y === food.y) {
         setSpeed(prev => Math.max(50, prev * 0.95));
-        setScore((prev: number) => prev + 100);
+        setScore(prev => prev + 100);
       } else {
         newSnake.pop();
       }
@@ -146,13 +146,14 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
         }}
       >
           <div
-            className="absolute grid grid-cols-20 grid-rows-20 gap-0"
+            className="absolute grid grid-cols-10 grid-rows-10 gap-0"
             style={{ 
               width: '100%',
               height: '100%',
-              fontSize: 'clamp(1rem, 2vw, 1.5rem)', // Responsive font size
+              fontSize: 'clamp(1rem, 3vw, 2rem)',
               background: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%)',
-              backgroundSize: '10% 10%'
+              backgroundSize: '10% 10%',
+              transform: 'scale(1.8)' // Zoom in the grid
             }}
           >
             {/* Main snake head */}
