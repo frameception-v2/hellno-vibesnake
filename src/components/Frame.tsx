@@ -100,6 +100,10 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
         case 'DOWN': head.y += 1; break;
       }
 
+      // Wrap snake around grid edges
+      head.x = (head.x + 20) % 20;
+      head.y = (head.y + 20) % 20;
+
       if (checkCollision(head)) {
         setGameOver(true);
         return;
@@ -108,15 +112,8 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
       newSnake.unshift(head);
 
       if (head.x === food.x && head.y === food.y) {
-        // Generate new food in random location not occupied by snake
-        let newFood: {x: number, y: number} = generateFood();
-        do {
-          newFood = generateFood(); 
-        } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
-        
-        setFood(newFood);
         setSpeed(prev => Math.max(50, prev * 0.95));
-        setScore((prev: number) => prev + 100);
+        setScore(prev => prev + 100);
       } else {
         newSnake.pop();
       }
