@@ -29,6 +29,8 @@ function SnakeGame() {
   const [gameOver, setGameOver] = useState(false);
   const [speed, setSpeed] = useState(200);
   const [score, setScore] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchStartY, setTouchStartY] = useState(0);
 
   const generateFood = () => ({
     x: Math.floor(Math.random() * 20),
@@ -50,9 +52,33 @@ function SnakeGame() {
       }
     };
 
+    const handleTouch = (e: TouchEvent) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - touchStartX;
+      const deltaY = touch.clientY - touchStartY;
+      
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX > 0 && direction !== 'LEFT') setDirection('RIGHT');
+        else if (deltaX < 0 && direction !== 'RIGHT') setDirection('LEFT');
+      } else {
+        if (deltaY > 0 && direction !== 'UP') setDirection('DOWN');
+        else if (deltaY < 0 && direction !== 'DOWN') setDirection('UP');
+      }
+    };
+
     window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [direction]);
+    window.addEventListener('touchstart', (e) => setTouchStartX(e.touches[0].clientX));
+    window.addEventListener('touchstart', (e) => setTouchStartY(e.touches[0].clientY));
+    window.addEventListener('touchmove', handleTouch, { passive: false });
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('touchstart', (e) => setTouchStartX(e.touches[0].clientX));
+      window.removeEventListener('touchstart', (e) => setTouchStartY(e.touches[0].clientY));
+      window.removeEventListener('touchmove', handleTouch);
+    };
+  }, [direction, touchStartX, touchStartY]);
 
   useEffect(() => {
     if (gameOver) return;
@@ -100,8 +126,8 @@ function SnakeGame() {
       </CardHeader>
       <CardContent>
         <div 
-          className="relative bg-gray-900 rounded-lg" 
-          style={{ width: '400px', height: '400px' }}
+          className="relative bg-gray-900 rounded-lg touch-none"
+          style={{ width: '400px', height: '400px', touchAction: 'none' }}
         >
           <div 
             className="absolute grid grid-cols-20 grid-rows-20 gap-0" 
