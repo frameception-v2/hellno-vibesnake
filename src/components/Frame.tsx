@@ -25,7 +25,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
   const [food, setFood] = useState({ x: 5, y: 5 });
   const [direction, setDirection] = useState<'RIGHT' | 'LEFT' | 'UP' | 'DOWN'>('RIGHT');
   const [gameOver, setGameOver] = useState(false);
-  const [speed, setSpeed] = useState(200);
+  const [speed, setSpeed] = useState(300);
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchStartY, setTouchStartY] = useState(0);
 
@@ -115,8 +115,8 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
         } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
         
         setFood(newFood);
-        setSpeed(prev => Math.max(50, prev * 0.9));
-        setScore(prev => prev + 100);
+        setSpeed(prev => Math.max(50, prev * 0.95));
+        setScore((prev: number) => prev + 100);
       } else {
         newSnake.pop();
       }
@@ -150,13 +150,13 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
             }}
           >
             {/* Grid cells */}
-            {Array.from({ length: 225 }).map((_, i) => (
+            {Array.from({ length: 400 }).map((_, i) => (
               <div
                 key={i}
                 className="border border-gray-800/50"
                 style={{
-                  gridColumn: (i % 15) + 1,
-                  gridRow: Math.floor(i / 15) + 1
+                  gridColumn: (i % 20) + 1,
+                  gridRow: Math.floor(i / 20) + 1
                 }}
               />
             ))}
