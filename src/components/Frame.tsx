@@ -149,17 +149,6 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
               backgroundSize: '10% 10%'
             }}
           >
-            {/* Grid cells */}
-            {Array.from({ length: 400 }).map((_, i) => (
-              <div
-                key={i}
-                className="border border-gray-800/50"
-                style={{
-                  gridColumn: (i % 20) + 1,
-                  gridRow: Math.floor(i / 20) + 1
-                }}
-              />
-            ))}
             {/* Main snake head with growing size */}
             <div
               className="flex items-center justify-center transition-all duration-100"
