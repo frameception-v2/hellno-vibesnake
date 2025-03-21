@@ -133,21 +133,35 @@ function SnakeGame() {
             className="absolute grid grid-cols-20 grid-rows-20 gap-0" 
             style={{ width: '100%', height: '100%' }}
           >
-            {snake.map((segment, index) => (
-              <span
-                key={index}
-                className="flex items-center justify-center transition-all duration-100"
+            {/* Main snake head with growing size */}
+            <div
+              className="flex items-center justify-center transition-all duration-100"
+              style={{
+                gridColumn: snake[0].x + 1,
+                gridRow: snake[0].y + 1,
+                fontSize: `${1.5 + (score/10)}rem`,
+                transform: `scale(${1 + (snake.length/20)})`,
+                zIndex: 20
+              }}
+            >
+              🐍
+            </div>
+            
+            {/* Snake body trail effect */}
+            {snake.slice(1).map((segment, index) => (
+              <div
+                key={index+1}
+                className="flex items-center justify-center transition-all duration-100 opacity-50"
                 style={{
                   gridColumn: segment.x + 1,
                   gridRow: segment.y + 1,
-                  fontSize: `${1.5 + (score/1000)}rem`, // Grow size based on score
-                  transform: `scale(${1 + (index/snake.length)})`, // Bigger segments near head
-                  opacity: 1 - (index * 0.3)/snake.length,
-                  zIndex: snake.length - index
+                  fontSize: `${1.5 + (score/10)}rem`,
+                  transform: `scale(${1 + (snake.length/20) - ((index+1)/10)})`,
+                  zIndex: 19 - index
                 }}
               >
-                {index === 0 ? '🐍' : '🔵'} {/* Snake head/body emojis */}
-              </span>
+                🐍
+              </div>
             ))}
             <div
               className="flex items-center justify-center text-4xl animate-pulse"
