@@ -39,8 +39,8 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
   };
 
   const generateFood = () => ({
-    x: Math.floor(Math.random() * 20),
-    y: Math.floor(Math.random() * 20)
+    x: Math.floor(Math.random() * 10),
+    y: Math.floor(Math.random() * 10)
   });
 
   const checkCollision = useCallback((head: { x: number, y: number }) => {
@@ -100,9 +100,9 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
         case 'DOWN': head.y += 1; break;
       }
 
-      // Wrap snake around grid edges
-      head.x = (head.x + 10) % 10;
-      head.y = (head.y + 10) % 10;
+      // Wrap snake around 10x10 grid edges
+      head.x = head.x % 10;
+      head.y = head.y % 10;
 
       if (checkCollision(head)) {
         setGameOver(true);
@@ -113,7 +113,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
 
       if (head.x === food.x && head.y === food.y) {
         setSpeed(prev => Math.max(50, prev * 0.95));
-        setScore(prev => prev + 100);
+        setScore((prev: number) => prev + 100);
       } else {
         newSnake.pop();
       }
@@ -152,8 +152,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
               height: '100%',
               fontSize: 'clamp(1rem, 3vw, 2rem)',
               background: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%)',
-              backgroundSize: '10% 10%',
-              transform: 'scale(1.8)' // Zoom in the grid
+              backgroundSize: '10% 10%'
             }}
           >
             {/* Main snake head */}
