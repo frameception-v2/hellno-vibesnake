@@ -88,7 +88,7 @@ function SnakeGame() {
 
     const gameInterval = setInterval(moveSnake, speed);
     return () => clearInterval(gameInterval);
-  }, [snake, direction, food, gameOver, speed]);
+  }, [snake, direction, food, gameOver, speed, checkCollision]);
 
   return (
     <Card>
@@ -238,7 +238,7 @@ export default function Frame() {
       }}
     >
       <div className="w-[300px] mx-auto py-2 px-2">
-        <ExampleCard />
+        <SnakeGame />
       </div>
     </div>
   );
