@@ -120,18 +120,27 @@ function SnakeGame() {
     <Card>
       <CardHeader>
         <CardTitle>Degen Snake 🐍🎩</CardTitle>
-        <CardDescription>
-          Score: {score} | Speed: {Math.round((200 / speed) * 100)}%
+        <CardDescription className="flex flex-col md:flex-row gap-1">
+          <span>Score: {score}</span>
+          <span>Speed: {Math.round((200 / speed) * 100)}%</span>
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div 
-          className="relative bg-gray-900 rounded-lg touch-none"
-          style={{ width: '400px', height: '400px', touchAction: 'none' }}
+          className="relative bg-gray-900 rounded-lg touch-none mx-auto"
+          style={{ 
+            width: 'min(90vw, 400px)', 
+            height: 'min(90vw, 400px)',
+            touchAction: 'none' 
+          }}
         >
-          <div 
-            className="absolute grid grid-cols-20 grid-rows-20 gap-0" 
-            style={{ width: '100%', height: '100%' }}
+          <div
+            className="absolute grid grid-cols-20 grid-rows-20 gap-0"
+            style={{ 
+              width: '100%',
+              height: '100%',
+              fontSize: 'clamp(1rem, 2vw, 1.5rem)' // Responsive font size
+            }}
           >
             {/* Main snake head with growing size */}
             <div
@@ -139,7 +148,7 @@ function SnakeGame() {
               style={{
                 gridColumn: snake[0].x + 1,
                 gridRow: snake[0].y + 1,
-                fontSize: `${1.5 + (score/10)}rem`,
+                fontSize: `clamp(1rem, ${1.5 + (score/10)}rem, 2.5rem)`,
                 transform: `scale(${1 + (snake.length/20)})`,
                 zIndex: 20
               }}
@@ -155,7 +164,7 @@ function SnakeGame() {
                 style={{
                   gridColumn: segment.x + 1,
                   gridRow: segment.y + 1,
-                  fontSize: `${1.5 + (score/10)}rem`,
+                  fontSize: `clamp(0.8rem, ${1.5 + (score/10)}rem, 2rem)`,
                   transform: `scale(${1 + (snake.length/20) - ((index+1)/10)})`,
                   zIndex: 19 - index
                 }}
@@ -282,7 +291,7 @@ export default function Frame() {
         paddingRight: context?.client.safeAreaInsets?.right ?? 0,
       }}
     >
-      <div className="w-[300px] mx-auto py-2 px-2">
+      <div className="w-full max-w-[400px] mx-auto py-2 px-4 md:px-2">
         <SnakeGame />
       </div>
     </div>
