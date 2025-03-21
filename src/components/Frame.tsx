@@ -26,8 +26,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
   const [direction, setDirection] = useState<'RIGHT' | 'LEFT' | 'UP' | 'DOWN'>('RIGHT');
   const [gameOver, setGameOver] = useState(false);
   const [speed, setSpeed] = useState(200);
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchStartY, setTouchStartY] = useState(0);
+  const touchStartRef = useRef({ x: 0, y: 0 });
 
   const resetGame = () => {
     setSnake([{ x: 10, y: 10 }]);
@@ -50,6 +49,21 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
     
     return newFood;
   };
+
+  const handleTouch = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - touchStartRef.current.x;
+    const deltaY = touch.clientY - touchStartRef.current.y;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX > 0 && direction !== 'LEFT') setDirection('RIGHT');
+      else if (deltaX < 0 && direction !== 'RIGHT') setDirection('LEFT');
+    } else {
+      if (deltaY > 0 && direction !== 'UP') setDirection('DOWN');
+      else if (deltaY < 0 && direction !== 'DOWN') setDirection('UP');
+    }
+  }, [direction]);
 
   const checkCollision = useCallback((head: { x: number, y: number }) => {
     return snake.some((segment, index) => index !== 0 && segment.x === head.x && segment.y === head.y);
@@ -81,15 +95,9 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
     };
 
     window.addEventListener('keydown', handleKeyPress);
-    window.addEventListener('touchstart', (e) => setTouchStartX(e.touches[0].clientX));
-    window.addEventListener('touchstart', (e) => setTouchStartY(e.touches[0].clientY));
-    window.addEventListener('touchmove', handleTouch, { passive: false });
     
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
-      window.removeEventListener('touchstart', (e) => setTouchStartX(e.touches[0].clientX));
-      window.removeEventListener('touchstart', (e) => setTouchStartY(e.touches[0].clientY));
-      window.removeEventListener('touchmove', handleTouch);
     };
   }, [direction, touchStartX, touchStartY]);
 
@@ -163,6 +171,13 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
               background: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%)',
               backgroundSize: '10% 10%'
             }}
+            onTouchStart={(e) => {
+              touchStartRef.current = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY
+              };
+            }}
+            onTouchMove={handleTouch}
           >
             {/* Main snake head */}
             <div
