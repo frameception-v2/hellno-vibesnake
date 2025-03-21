@@ -134,18 +134,23 @@ function SnakeGame() {
             style={{ width: '100%', height: '100%' }}
           >
             {snake.map((segment, index) => (
-              <div
+              <span
                 key={index}
-                className="bg-green-500 rounded-sm"
+                className="flex items-center justify-center transition-all duration-100"
                 style={{
                   gridColumn: segment.x + 1,
                   gridRow: segment.y + 1,
-                  transition: 'all 0.1s linear'
+                  fontSize: `${1.5 + (score/1000)}rem`, // Grow size based on score
+                  transform: `scale(${1 + (index/snake.length)})`, // Bigger segments near head
+                  opacity: 1 - (index * 0.3)/snake.length,
+                  zIndex: snake.length - index
                 }}
-              />
+              >
+                {index === 0 ? '🐍' : '🔵'} {/* Snake head/body emojis */}
+              </span>
             ))}
             <div
-              className="text-2xl flex items-center justify-center"
+              className="flex items-center justify-center text-4xl animate-pulse"
               style={{
                 gridColumn: food.x + 1,
                 gridRow: food.y + 1,
