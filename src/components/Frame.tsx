@@ -6,13 +6,6 @@ import sdk, {
   SignIn as SignInCore,
   type Context,
 } from "@farcaster/frame-sdk";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "~/components/ui/card";
 
 import { config } from "~/components/providers/WagmiProvider";
 import { truncateAddress } from "~/lib/truncateAddress";
@@ -160,15 +153,14 @@ function SnakeGame() {
   }, [gameOver]);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Degen Snake 🐍🎩</CardTitle>
-        <CardDescription className="flex flex-col md:flex-row gap-1">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
+      <div className="mb-4 text-center">
+        <h1 className="text-3xl font-bold text-white mb-2">Degen Snake 🐍🎩</h1>
+        <div className="flex gap-4 text-white">
           <span>Score: {score}</span>
           <span>Speed: {Math.round((200 / speed) * 100)}%</span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+        </div>
+      </div>
         <div 
           className="relative bg-gray-900 rounded-lg touch-none mx-auto"
           style={{ 
@@ -237,8 +229,7 @@ function SnakeGame() {
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
   );
 }
 
