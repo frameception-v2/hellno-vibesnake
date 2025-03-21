@@ -1,3 +1,3 @@
-export const PROJECT_ID = 'farcaster-frames-template';
-export const PROJECT_TITLE = "Farcaster Frames Template";
-export const PROJECT_DESCRIPTION = "A Farcaster Frames v2 Template by hellno";
+export const PROJECT_ID = 'degen-snake';
+export const PROJECT_TITLE = "Degen Snake 🐍🎩";
+export const PROJECT_DESCRIPTION = "Vibey snake game that speeds up when you eat degen hats!";
