@@ -32,6 +32,15 @@ function SnakeGame() {
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchStartY, setTouchStartY] = useState(0);
 
+  const resetGame = () => {
+    setSnake([{ x: 10, y: 10 }]);
+    setFood({ x: 5, y: 5 });
+    setDirection('RIGHT');
+    setGameOver(false);
+    setSpeed(200);
+    setScore(0);
+  };
+
   const generateFood = () => ({
     x: Math.floor(Math.random() * 20),
     y: Math.floor(Math.random() * 20)
@@ -217,8 +226,14 @@ function SnakeGame() {
             </div>
           </div>
           {gameOver && (
-            <div className="absolute inset-0 bg-red-900/80 flex items-center justify-center text-2xl">
-              Game Over! Refresh to play again
+            <div className="absolute inset-0 bg-red-900/80 flex flex-col items-center justify-center gap-4 text-2xl">
+              <div>Game Over!</div>
+              <button 
+                onClick={resetGame}
+                className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg text-white font-semibold transition-colors"
+              >
+                Play Again
+              </button>
             </div>
           )}
         </div>
