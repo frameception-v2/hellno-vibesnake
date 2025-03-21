@@ -39,7 +39,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
   };
 
   const generateFood = () => {
-    let newFood;
+    let newFood: {x: number, y: number};
     // Generate new food until we find a position not occupied by the snake
     do {
       newFood = {
@@ -52,8 +52,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
   };
 
   const checkCollision = useCallback((head: { x: number, y: number }) => {
-    return head.x < 0 || head.x >= 10 || head.y < 0 || head.y >= 10 ||
-      snake.some((segment, index) => index !== 0 && segment.x === head.x && segment.y === head.y);
+    return snake.some((segment, index) => index !== 0 && segment.x === head.x && segment.y === head.y);
   }, [snake]);
 
   useEffect(() => {
@@ -109,9 +108,10 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
       }
 
       // Wrap snake around 10x10 grid edges
-      head.x = head.x % 10;
-      head.y = head.y % 10;
+      head.x = ((head.x % 10) + 10) % 10;
+      head.y = ((head.y % 10) + 10) % 10;
 
+      // Only check for self-collision
       if (checkCollision(head)) {
         setGameOver(true);
         return;
@@ -132,7 +132,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
 
     const gameInterval = setInterval(moveSnake, speed);
     return () => clearInterval(gameInterval);
-  }, [snake, direction, food, gameOver, speed, checkCollision, setScore]);
+  }, [snake, direction, food, gameOver, speed, checkCollision, setScore, generateFood]);
 
 
   return (
