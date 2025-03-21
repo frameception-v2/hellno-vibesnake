@@ -37,10 +37,10 @@ function SnakeGame() {
     y: Math.floor(Math.random() * 20)
   });
 
-  const checkCollision = (head: { x: number, y: number }) => {
+  const checkCollision = useCallback((head: { x: number, y: number }) => {
     return head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 ||
       snake.some((segment, index) => index !== 0 && segment.x === head.x && segment.y === head.y);
-  };
+  }, [snake]);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -103,9 +103,9 @@ function SnakeGame() {
 
       if (head.x === food.x && head.y === food.y) {
         // Generate new food in random location not occupied by snake
-        let newFood;
+        let newFood: {x: number, y: number} = generateFood();
         do {
-          newFood = generateFood();
+          newFood = generateFood(); 
         } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
         
         setFood(newFood);
@@ -203,7 +203,7 @@ function SnakeGame() {
                   zIndex: 19 - index
                 }}
               >
-                🐍
+                🎩
               </div>
             ))}
             <div
