@@ -37,7 +37,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
     setScore(0);
   };
 
-  const generateFood = () => {
+  const generateFood = useCallback(() => {
     let newFood: {x: number, y: number};
     // Generate new food until we find a position not occupied by the snake
     do {
@@ -48,7 +48,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
     } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
     
     return newFood;
-  };
+  }, [snake]);
 
   const handleTouch = useCallback((e: React.TouchEvent) => {
     e.preventDefault();
@@ -82,8 +82,8 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
     const handleTouch = (e: TouchEvent) => {
       e.preventDefault();
       const touch = e.touches[0];
-      const deltaX = touch.clientX - touchStartX;
-      const deltaY = touch.clientY - touchStartY;
+      const deltaX = touch.clientX - touchStartRef.current.x;
+      const deltaY = touch.clientY - touchStartRef.current.y;
       
       if (Math.abs(deltaX) > Math.abs(deltaY)) {
         if (deltaX > 0 && direction !== 'LEFT') setDirection('RIGHT');
@@ -99,7 +99,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [direction, touchStartX, touchStartY]);
+  }, [direction]);
 
   useEffect(() => {
     if (gameOver) return;
