@@ -124,33 +124,6 @@ function SnakeGame() {
     return () => clearInterval(gameInterval);
   }, [snake, direction, food, gameOver, speed, checkCollision]);
 
-  // Make hat move randomly every second
-  useEffect(() => {
-    if (gameOver) return;
-
-    const moveFood = () => {
-      setFood(prev => {
-        const directions = [
-          { dx: 1, dy: 0 },
-          { dx: -1, dy: 0 },
-          { dx: 0, dy: 1 },
-          { dx: 0, dy: -1 }
-        ];
-        const dir = directions[Math.floor(Math.random() * directions.length)];
-        let newX = prev.x + dir.dx;
-        let newY = prev.y + dir.dy;
-
-        // Keep within grid bounds (0-19)
-        newX = Math.max(0, Math.min(19, newX));
-        newY = Math.max(0, Math.min(19, newY));
-
-        return { x: newX, y: newY };
-      });
-    };
-
-    const foodInterval = setInterval(moveFood, 1000);
-    return () => clearInterval(foodInterval);
-  }, [gameOver]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
@@ -174,9 +147,22 @@ function SnakeGame() {
             style={{ 
               width: '100%',
               height: '100%',
-              fontSize: 'clamp(1rem, 2vw, 1.5rem)' // Responsive font size
+              fontSize: 'clamp(1rem, 2vw, 1.5rem)', // Responsive font size
+              background: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%)',
+              backgroundSize: '5% 5%'
             }}
           >
+            {/* Grid cells */}
+            {Array.from({ length: 400 }).map((_, i) => (
+              <div
+                key={i}
+                className="border border-gray-800/50"
+                style={{
+                  gridColumn: (i % 20) + 1,
+                  gridRow: Math.floor(i / 20) + 1
+                }}
+              />
+            ))}
             {/* Main snake head with growing size */}
             <div
               className="flex items-center justify-center transition-all duration-100"
