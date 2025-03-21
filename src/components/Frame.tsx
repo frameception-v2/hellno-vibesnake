@@ -113,7 +113,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
 
       if (head.x === food.x && head.y === food.y) {
         setSpeed(prev => Math.max(50, prev * 0.95));
-        setScore(prev => prev + 100);
+        setScore((prev: number) => prev + 100);
       } else {
         newSnake.pop();
       }
@@ -127,15 +127,24 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
 
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-gray-900">
+    <div 
+      className="fixed top-0 left-0 w-full h-full bg-gray-900 overflow-hidden"
+      style={{
+        display: 'grid',
+        placeItems: 'center',
+        touchAction: 'none'
+      }}
+    >
       <div 
-        className="relative bg-gray-900 touch-none mx-auto"
+        className="relative bg-gray-900"
         style={{ 
-          width: '90vmin',
-          height: '90vmin',
-          touchAction: 'none' 
+          width: '95vmin',
+          height: '95vmin',
+          touchAction: 'none',
+          maxWidth: '100%',
+          maxHeight: '100%'
         }}
-        >
+      >
           <div
             className="absolute grid grid-cols-20 grid-rows-20 gap-0"
             style={{ 
@@ -146,14 +155,13 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
               backgroundSize: '10% 10%'
             }}
           >
-            {/* Main snake head with growing size */}
+            {/* Main snake head */}
             <div
-              className="flex items-center justify-center transition-all duration-100"
+              className="flex items-center justify-center"
               style={{
                 gridColumn: snake[0].x + 1,
                 gridRow: snake[0].y + 1,
-                fontSize: `clamp(1rem, ${1.5 + (score/10)}rem, 2.5rem)`,
-                transform: `scale(${1 + (snake.length/20)})`,
+                fontSize: '1.5rem',
                 zIndex: 20
               }}
             >
@@ -164,12 +172,11 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
             {snake.slice(1).map((segment, index) => (
               <div
                 key={index+1}
-                className="flex items-center justify-center transition-all duration-100 opacity-50"
+                className="flex items-center justify-center opacity-50"
                 style={{
                   gridColumn: segment.x + 1,
                   gridRow: segment.y + 1,
-                  fontSize: `clamp(0.8rem, ${1.5 + (score/10)}rem, 2rem)`,
-                  transform: `scale(${1 + (snake.length/20) - ((index+1)/10)})`,
+                  fontSize: '1rem',
                   zIndex: 19 - index
                 }}
               >
@@ -177,10 +184,10 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
               </div>
             ))}
             <div
-              className="flex items-center justify-center text-4xl animate-pulse"
+              className="flex items-center justify-center text-2xl animate-pulse"
               style={{
                 gridColumn: food.x + 1,
-                gridRow: food.y + 1,
+                gridRow: food.y + 1
               }}
             >
               🎩
