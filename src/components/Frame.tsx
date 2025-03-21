@@ -102,7 +102,13 @@ function SnakeGame() {
       newSnake.unshift(head);
 
       if (head.x === food.x && head.y === food.y) {
-        setFood(generateFood());
+        // Generate new food in random location not occupied by snake
+        let newFood;
+        do {
+          newFood = generateFood();
+        } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+        
+        setFood(newFood);
         setSpeed(prev => Math.max(50, prev * 0.9));
         setScore(prev => prev + 100);
       } else {
@@ -115,6 +121,34 @@ function SnakeGame() {
     const gameInterval = setInterval(moveSnake, speed);
     return () => clearInterval(gameInterval);
   }, [snake, direction, food, gameOver, speed, checkCollision]);
+
+  // Make hat move randomly every second
+  useEffect(() => {
+    if (gameOver) return;
+
+    const moveFood = () => {
+      setFood(prev => {
+        const directions = [
+          { dx: 1, dy: 0 },
+          { dx: -1, dy: 0 },
+          { dx: 0, dy: 1 },
+          { dx: 0, dy: -1 }
+        ];
+        const dir = directions[Math.floor(Math.random() * directions.length)];
+        let newX = prev.x + dir.dx;
+        let newY = prev.y + dir.dy;
+
+        // Keep within grid bounds (0-19)
+        newX = Math.max(0, Math.min(19, newX));
+        newY = Math.max(0, Math.min(19, newY));
+
+        return { x: newX, y: newY };
+      });
+    };
+
+    const foodInterval = setInterval(moveFood, 1000);
+    return () => clearInterval(foodInterval);
+  }, [gameOver]);
 
   return (
     <Card>
