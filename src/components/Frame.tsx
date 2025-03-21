@@ -126,21 +126,14 @@ function SnakeGame() {
 
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
-      <div className="mb-4 text-center">
-        <h1 className="text-3xl font-bold text-white mb-2">Degen Snake 🐍🎩</h1>
-        <div className="flex gap-4 text-white">
-          <span>Score: {score}</span>
-          <span>Speed: {Math.round((200 / speed) * 100)}%</span>
-        </div>
-      </div>
-        <div 
-          className="relative bg-gray-900 rounded-lg touch-none mx-auto"
-          style={{ 
-            width: 'min(90vw, 400px)', 
-            height: 'min(90vw, 400px)',
-            touchAction: 'none' 
-          }}
+    <div className="fixed top-0 left-0 w-full h-full bg-gray-900">
+      <div 
+        className="relative bg-gray-900 touch-none mx-auto"
+        style={{ 
+          width: '90vmin',
+          height: '90vmin',
+          touchAction: 'none' 
+        }}
         >
           <div
             className="absolute grid grid-cols-20 grid-rows-20 gap-0"
@@ -149,17 +142,17 @@ function SnakeGame() {
               height: '100%',
               fontSize: 'clamp(1rem, 2vw, 1.5rem)', // Responsive font size
               background: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 100%)',
-              backgroundSize: '5% 5%'
+              backgroundSize: '10% 10%'
             }}
           >
             {/* Grid cells */}
-            {Array.from({ length: 400 }).map((_, i) => (
+            {Array.from({ length: 225 }).map((_, i) => (
               <div
                 key={i}
                 className="border border-gray-800/50"
                 style={{
-                  gridColumn: (i % 20) + 1,
-                  gridRow: Math.floor(i / 20) + 1
+                  gridColumn: (i % 15) + 1,
+                  gridRow: Math.floor(i / 15) + 1
                 }}
               />
             ))}
@@ -317,7 +310,11 @@ export default function Frame() {
         paddingRight: context?.client.safeAreaInsets?.right ?? 0,
       }}
     >
-      <div className="w-full max-w-[400px] mx-auto py-2 px-4 md:px-2">
+      <div className="w-full max-w-[400px] mx-auto pt-4 px-4 md:px-2">
+        <div className="text-white absolute top-4 left-4 z-50">
+          <div>Score: {score}</div>
+          <div>Speed: {Math.round((200 / speed) * 100)}%</div>
+        </div>
         <SnakeGame />
       </div>
     </div>
