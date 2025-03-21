@@ -15,7 +15,12 @@ import { createStore } from "mipd";
 import { Label } from "~/components/ui/label";
 import { PROJECT_TITLE } from "~/lib/constants";
 
-function SnakeGame({ score, setScore }) {
+interface SnakeGameProps {
+  score: number;
+  setScore: (value: number) => void;
+}
+
+function SnakeGame({ score, setScore }: SnakeGameProps) {
   const [snake, setSnake] = useState([{ x: 10, y: 10 }]);
   const [food, setFood] = useState({ x: 5, y: 5 });
   const [direction, setDirection] = useState<'RIGHT' | 'LEFT' | 'UP' | 'DOWN'>('RIGHT');
@@ -121,7 +126,7 @@ function SnakeGame({ score, setScore }) {
 
     const gameInterval = setInterval(moveSnake, speed);
     return () => clearInterval(gameInterval);
-  }, [snake, direction, food, gameOver, speed, checkCollision]);
+  }, [snake, direction, food, gameOver, speed, checkCollision, setScore]);
 
 
   return (
@@ -313,7 +318,6 @@ export default function Frame() {
       <div className="w-full max-w-[400px] mx-auto pt-4 px-4 md:px-2">
         <div className="text-white absolute top-4 left-4 z-50">
           <div>Score: {score}</div>
-          <div>Speed: {Math.round((200 / speed) * 100)}%</div>
         </div>
         <SnakeGame score={score} setScore={setScore} />
       </div>
