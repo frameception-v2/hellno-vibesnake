@@ -38,10 +38,18 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
     setScore(0);
   };
 
-  const generateFood = () => ({
-    x: Math.floor(Math.random() * 10),
-    y: Math.floor(Math.random() * 10)
-  });
+  const generateFood = () => {
+    let newFood;
+    // Generate new food until we find a position not occupied by the snake
+    do {
+      newFood = {
+        x: Math.floor(Math.random() * 10),
+        y: Math.floor(Math.random() * 10)
+      };
+    } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+    
+    return newFood;
+  };
 
   const checkCollision = useCallback((head: { x: number, y: number }) => {
     return head.x < 0 || head.x >= 10 || head.y < 0 || head.y >= 10 ||
@@ -114,6 +122,7 @@ function SnakeGame({ score, setScore }: SnakeGameProps) {
       if (head.x === food.x && head.y === food.y) {
         setSpeed(prev => Math.max(50, prev * 0.95));
         setScore((prev: number) => prev + 100);
+        setFood(generateFood()); // Generate new food after eating
       } else {
         newSnake.pop();
       }
